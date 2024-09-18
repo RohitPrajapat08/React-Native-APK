@@ -219,6 +219,16 @@ jobs:
       - run: xcodebuild clean archive -workspace testCiCdReactNative.xcworkspace -scheme testCiCdReactNative -archivePath testCiCdReactNative.xcarchive CODE_SIGNING_ALLOWED=NO | xcpretty
         working-directory: ios
 
+      - name: Upload iOS Artifacts to S3
+        if: success()  # Ensure this step runs only if previous steps succeed
+        run: |
+          TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
+          S3_BUCKET="your-s3-bucket-name"
+          S3_PATH="builds/$TIMESTAMP/ios/"
+          
+          echo "Uploading iOS archive to S3..."
+          aws s3 cp ios/testCiCdReactNative.xcarchive s3://$S3_BUCKET/$S3_PATH/testCiCdReactNative.xcarchive --recursive
+
   build-android:
     runs-on: ubuntu-latest
     steps:
