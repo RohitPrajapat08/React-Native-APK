@@ -290,7 +290,7 @@ jobs:
         run: |
           TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
           S3_BUCKET="upload-react-native-apk"
-          S3_PATH="builds/$TIMESTAMP"
+          S3_PATH="$TIMESTAMP"
           
           echo "Uploading APK to S3..."
           aws s3 cp android/app/build/outputs/apk/release/app-release.apk s3://$S3_BUCKET/$S3_PATH/app-release.apk
