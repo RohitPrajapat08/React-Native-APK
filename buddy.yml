@@ -1,0 +1,42 @@
+- pipeline: "build android"
+  on: "CLICK"
+  refs:
+    - "refs/heads/main"
+    - "refs/heads/with-poplar-react-native-libraries"
+  priority: "NORMAL"
+  fail_on_prepare_env_warning: true
+  actions:
+    - action: "Execute: ./gradlew assembleRelease"
+      type: "BUILD"
+      working_directory: "/buddy/react-native-ci-cd-compare"
+      docker_image_name: "library/openjdk"
+      docker_image_tag: "11"
+      execute_commands:
+        - "export ANDROID_HOME=\"/opt/android/sdk/\""
+        - "export PATH=$PATH:/opt/android/sdk/cmdline-tools/tools/bin"
+        - "if [ ! -d \"$ANDROID_HOME/cmdline-tools\" ]; then"
+        - " curl -o sdk.zip https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip"
+        - " unzip sdk.zip"
+        - " rm sdk.zip"
+        - " mkdir \"$ANDROID_HOME/cmdline-tools\""
+        - " mv cmdline-tools \"$ANDROID_HOME/cmdline-tools/tools\""
+        - " yes | \"$ANDROID_HOME/cmdline-tools/tools/bin/sdkmanager\" --licenses"
+        - "fi"
+        - ""
+        - "#build"
+        - "npm i -g yarn"
+        - "yarn install --frozen-lockfile"
+        - "cd ./android"
+        - "chmod +x gradlew"
+        - "./gradlew bundleRelease assembleRelease"
+      setup_commands:
+        - "# install nodejs"
+        - "curl -sL https://deb.nodesource.com/setup_16.x | bash -"
+        - "apt-get install -y nodejs"
+      cached_dirs:
+        - "/root/.gradle"
+        - "/opt/android/sdk"
+      volume_mappings:
+        - "/:/buddy/react-native-ci-cd-compare"
+      cache_base_image: true
+      shell: "BASH"
