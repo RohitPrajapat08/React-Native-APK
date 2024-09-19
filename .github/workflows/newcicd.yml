@@ -289,7 +289,7 @@ jobs:
       - name: Upload to S3
         run: |
           # TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
-          TIMESTAMP=$(date +"%d-%B-%Y-%I:%M:%S-%p")
+          TIMESTAMP=$(date +"%d-%B-%Y-%I-%M-%S-%p")
           S3_BUCKET="upload-react-native-apk"
           S3_PATH="$TIMESTAMP"
           
