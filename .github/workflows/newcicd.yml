@@ -288,10 +288,10 @@ jobs:
       # Upload APK and AAB to S3 with timestamped folder
       - name: Upload to S3
         run: |
-            # Set the timezone to IST
-            export TZ='Asia/Kolkata'
-            # Generate timestamp in IST
-            TIMESTAMP=$(date +"%d-%B-%Y-%I-%M-%S-%p")
+          # Set the timezone to IST
+          export TZ='Asia/Kolkata'
+          # Generate timestamp in IST
+          TIMESTAMP=$(date +"%d-%B-%Y-%I-%M-%S-%p")
           # TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
           # TIMESTAMP=$(date +"%d-%B-%Y-%I-%M-%S-%p")
           S3_BUCKET="upload-react-native-apk"
